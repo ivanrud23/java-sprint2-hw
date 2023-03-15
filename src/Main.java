@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        YearManager yearManager = new YearManager("resources/y.2021.csv");
+        YearManager yearManager = new YearManager();
         MonthManager monthManager = new MonthManager();
 
 
@@ -16,18 +16,18 @@ public class Main {
                 monthManager.loadFile(2, "resources/m.202102.csv");
                 monthManager.loadFile(3, "resources/m.202103.csv");
             } else if (command == 2) {
-
+                yearManager.loadFile(2021, "resources/y.2021.csv");
             } else if (command == 3) {
                 Checker checker = new Checker(yearManager, monthManager);
                 checker.check();
             } else if (command == 4) {
-                monthManager.MonthInform();
+                monthManager.monthInform();
             } else if (command == 5) {
-                yearManager.YearInform();
+                yearManager.yearInform();
             } else if (command == 911) {
                 return;
             } else {
-                System.out.println("Вы ыыели несуществующую комманду");
+                System.out.println("Вы ввели несуществующую комманду");
             }
         }
     }
@@ -44,7 +44,5 @@ public class Main {
         System.out.println("Для выхода введите — 911");
         System.out.println();
     }
-
-
 }
 

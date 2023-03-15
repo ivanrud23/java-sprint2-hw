@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -13,8 +12,8 @@ public class Checker {
 
 
     public void check() {
-        HashMap<Integer, HashMap<Boolean, Integer>> checkYear = YearMap();
-        HashMap<Integer, HashMap<Boolean, Integer>> checkMonth = MonthMap();
+        HashMap<Integer, HashMap<Boolean, Integer>> checkYear = yearMap();
+        HashMap<Integer, HashMap<Boolean, Integer>> checkMonth = monthMap();
         boolean flag = true;
         for (Integer month : checkYear.keySet()) {
             for (Boolean isExpense : checkYear.get(month).keySet()) {
@@ -33,7 +32,7 @@ public class Checker {
     }
 
 
-    public HashMap YearMap () {
+    public HashMap<Integer, HashMap<Boolean, Integer>> yearMap() {
         HashMap<Integer, HashMap<Boolean, Integer>> checkYear = new HashMap<>();
         for (YearData month : yearManager.allYearData) {
             if (!checkYear.containsKey(month.month)){
@@ -46,21 +45,8 @@ public class Checker {
     }
 
 
-    public HashMap MonthMap () {
-        HashMap<Integer, HashMap<Boolean, HashMap<String, Integer>>> allMonthInfo = new HashMap<>();
-        for (MonthData itemData : monthManager.allMonthData) {
-
-            if (!allMonthInfo.containsKey(itemData.month)){
-                allMonthInfo.put(itemData.month, new HashMap<>());
-            }
-            HashMap<Boolean, HashMap<String, Integer>> monthInfo = allMonthInfo.get(itemData.month);
-
-            if (!monthInfo.containsKey(itemData.isExpense)) {
-                monthInfo.put(itemData.isExpense, new HashMap<>());
-            }
-            HashMap<String, Integer> itemInfo = monthInfo.get(itemData.isExpense);
-            itemInfo.put(itemData.itemName, itemData.sumOfOne * itemData.quantity);
-        }
+    public HashMap<Integer, HashMap<Boolean, Integer>> monthMap() {
+        HashMap<Integer, HashMap<Boolean, HashMap<String, Integer>>> allMonthInfo = monthManager.allMonthCollect();
 
         HashMap<Integer, HashMap<Boolean, Integer>> checkMonth = new HashMap<>();
         for (Integer month : allMonthInfo.keySet()) {

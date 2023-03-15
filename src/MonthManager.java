@@ -1,16 +1,13 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 public class MonthManager {
     public ArrayList<MonthData> allMonthData = new ArrayList<>();
+    public FileReader fileReader = new FileReader();
 
     public void loadFile(Integer month, String path) {
-        List<String> lines = readFileContents(path);
+        List<String> lines = fileReader.readFileContents(path);
         for (int i = 1; i < lines.size(); i++) {
             String line = lines.get(i);
             String[] parts = line.split(",");
@@ -25,21 +22,10 @@ public class MonthManager {
     }
 
 
-    List<String> readFileContents(String path) {
-        try {
-            return Files.readAllLines(Path.of(path));
-        } catch (IOException e) {
-            System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно файл не находится в нужной директории.");
-            return Collections.emptyList();
-        }
-    }
-
-
-    public void MonthInform() {
+    public HashMap<Integer, HashMap<Boolean, HashMap<String, Integer>>> allMonthCollect() {
         HashMap<Integer, HashMap<Boolean, HashMap<String, Integer>>> allMonthInfo = new HashMap<>();
         for (MonthData itemData : allMonthData) {
-
-            if (!allMonthInfo.containsKey(itemData.month)){
+            if (!allMonthInfo.containsKey(itemData.month)) {
                 allMonthInfo.put(itemData.month, new HashMap<>());
             }
             HashMap<Boolean, HashMap<String, Integer>> monthInfo = allMonthInfo.get(itemData.month);
@@ -50,7 +36,12 @@ public class MonthManager {
             HashMap<String, Integer> itemInfo = monthInfo.get(itemData.isExpense);
             itemInfo.put(itemData.itemName, itemData.sumOfOne * itemData.quantity);
         }
+        return allMonthInfo;
+    }
 
+
+    public void monthInform() {
+        HashMap<Integer, HashMap<Boolean, HashMap<String, Integer>>> allMonthInfo = allMonthCollect();
 
         for (Integer month : allMonthInfo.keySet()) {
             System.out.println("В " + month + " месяце:");

@@ -1,15 +1,13 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class YearManager {
     public ArrayList<YearData> allYearData = new ArrayList<>();
+    public FileReader fileReader = new FileReader();
 
-    public YearManager (String path) {
-        List<String> lines = readFileContents(path);
+
+    public void loadFile(Integer year, String path) {
+        List<String> lines = fileReader.readFileContents(path);
         for (int i = 1; i < lines.size(); i++) {
             String line = lines.get(i);
             String[] parts = line.split(",");
@@ -17,16 +15,18 @@ public class YearManager {
             int amount = Integer.parseInt(parts[1]);
             boolean isExpense = Boolean.parseBoolean(parts[2]);
 
-            YearData yearData = new YearData(month, amount, isExpense);
+            YearData yearData = new YearData(month, amount, isExpense, year);
             allYearData.add(yearData);
         }
     }
 
 
-    void YearInform() {
+    void yearInform() {
         int profitByMonth;
         int totalIncome = 0;
         int totalExpense = 0;
+        System.out.println("Данные за " + allYearData.get(0).year + " год");
+        System.out.println();
 
         for (int i = 0; i < allYearData.size(); i = i + 2) {
             profitByMonth = Math.abs(allYearData.get(i).amount - allYearData.get(i + 1).amount);
@@ -47,12 +47,4 @@ public class YearManager {
     }
 
 
-    List<String> readFileContents(String path) {
-        try {
-            return Files.readAllLines(Path.of(path));
-        } catch (IOException e) {
-            System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно файл не находится в нужной директории.");
-            return Collections.emptyList();
-        }
-    }
 }
